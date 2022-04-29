@@ -1,0 +1,51 @@
+# Created Orian Louant
+
+easyblock = 'CMakeMake'
+
+import os
+local_stackversion = os.getenv('LUMI_STACK_VERSION')
+
+name = 'hipSPARSE'
+version = '4.5.2'
+
+homepage = 'https://github.com/ROCmSoftwarePlatform/hipSPARSE/'
+
+whatis = [
+    'hipSPARSE is a SPARSE marshalling library, with multiple supported backends'
+]
+
+description = """
+hipSPARSE is a SPARSE marshalling library, with multiple supported backends. It
+sits between the application and a 'worker' SPARSE library, marshalling inputs
+into the backend library and marshalling results back to the application.
+hipSPARSE exports an interface that does not require the client to change,
+regardless of the chosen backend. Currently, hipSPARSE supports rocSPARSE and
+cuSPARSE as backends.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://github.com/ROCmSoftwarePlatform/hipSPARSE/archive/']
+sources     = ['rocm-%(version)s.tar.gz']
+checksums   = ['81ca24491fbf2bc8e5aa477a6c38776877579ac9f4241ddadeca76a579a7ebb5']
+
+builddependencies = [
+    ('buildtools', local_stackversion, '', True)
+]
+
+dependencies = [
+    ('rocm',     version), # No really needed: dependency of rocmlibs
+    ('rocmlibs', version),
+]
+
+configopts  = '-DCMAKE_MODULE_PATH=hipcc'
+configopts += '-DCMAKE_CXX_STANDARD=14'
+configopts += '-DBUILD_CLIENTS_SAMPLES=OFF'
+configopts += '-DBUILD_CLIENTS_TESTS=OFF'
+
+sanity_check_paths = {
+    'files': ['lib/libhipsparse.%s' % SHLIB_EXT, 'include/hipsparse.h'],
+    'dirs': ['hipsparse'],
+}
+
+moduleclass = 'numlib'
