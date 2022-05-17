@@ -74,4 +74,8 @@ We build our own EasyConfig. Two big warnings are needed though:
   * This is a trivial edit of the 0.4.0 one.
 
 
+### 0.9.0 for 21.12
+
+  * This is a trivial edit of the 0.4.0 and 0.5.0 ones.
+
 
