@@ -14,7 +14,7 @@
   * There is no support for BLIS in the CSCS repository.
 
 
-### Version 3.1 for CPE 21.08
+### Version 3.1 for CPE 21.08 and 21.12
 
   * The EasyConfig file is a direct port from the EasyBuilders one
 
