@@ -16,6 +16,10 @@ blocks of DFT self-consistency cycle.
 
   * [SIRIUS in the CSCS repository](https://github.com/easybuilders/CSCS/tree/master/easybuild/easyconfigs/s/SIRIUS)
 
-### Version 1.0.5 for CPE 21.08
+### Version 7.3.7 for CPE 21.08
 
   * The EasyConfig is derived from the CSCS one
+  
+### Version 7.3.1 for CPE 21.12
+
+  * The EasyConfig is a straightforward port of the 7.2.7 one.
