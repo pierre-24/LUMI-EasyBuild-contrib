@@ -14,3 +14,8 @@ There are the python, fortran, rust, and ruby interfaces.
 ### Version 1.16.0 for CPE 21.08
 
   * The EasyConfig is derived from the CSCS one
+  
+
+### Version 1.16.5 for CPE 21.12.
+
+  * The EasyConfig is a straightforward port of the 1.16.0 one.

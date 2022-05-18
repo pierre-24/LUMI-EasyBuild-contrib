@@ -19,3 +19,6 @@ matrix distributions, which cannot be used directly with a ScaLAPACK interface.
 
   * The EasyConfig is derived from the CSCS one
 
+### Version 1.5.4 for CPE 21.12
+
+  * The EasyConfig is a straightforward port of the 1.5.1 one.
