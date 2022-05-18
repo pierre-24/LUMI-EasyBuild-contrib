@@ -56,3 +56,9 @@ LUMI GPU partition.
   * As a centrally installed library has to be used in a different way then the
     manual explains, we provide some information in the module file.
 
+
+
+### Version 3.5.0 for cpeGNU 21.12
+
+  * Backported the changes to `QuEST/CMakeLists.txt` since 3.3.0 to our own version
+    of that file.
