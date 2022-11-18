@@ -1,0 +1,86 @@
+easyblock = 'Binary'
+
+name = 'jax'
+version = '0.3.25'
+versionsuffix = '-singularity'
+
+local_rocm_version = '5.3'
+local_token = 'ac5838fe86f043458516efa4b8235d7a'
+
+local_url_base = 'https://a3s.fi/swift/v1/AUTH_%s/lumi-experimental-containers' % local_token
+local_image_name = '%s-%s-rocm-%s.sif' % ('%(name)s', '%(version)s', local_rocm_version)
+
+local_execscript = """#!/bin/sh
+
+if [ -z "$SING_IMAGE" ]; then
+    echo "ERROR: No singularity-based module loaded!"
+    THIS_DIR=$(dirname "$(readlink -f "$0")")
+    echo "You probably should not have $THIS_DIR in your PATH."
+    exit 1
+fi
+
+%(installdir)s/bin/singularity_wrapper exec $(basename "$0") "$@"
+"""
+
+local_execscript_name = 'python'
+local_symlinks = ['python3', 'pip', 'pip3']
+
+homepage = 'https://jax.readthedocs.io/en/latest/'
+
+whatis = [
+    'Description: JAX provides composable transformations of Python+NumPy '
+    'programs: differentiate, vectorize, parallelize, Just-In-Time compile '
+    'to GPU/TPU'
+]
+
+description = """
+ JAX is Autograd and XLA, brought together for high-performance machine learning
+ research. With its updated version of Autograd, JAX can automatically
+ differentiate native Python and NumPy functions. It can differentiate through
+ loops, branches, recursion, and closures, and it can take derivatives of
+ derivatives of derivatives. It supports reverse-mode differentiation (a.k.a.
+ backpropagation) as well as forward-mode differentiation, and the two can be
+ composed arbitrarily to any order.
+ 
+ JAX uses XLA to compile and run your NumPy programs on GPUs and TPUs.
+ Compilation happens under the hood by default, with library calls getting
+ just-in-time compiled and executed. But JAX also lets you just-in-time compile
+ your own Python functions into XLA-optimized kernels using a one-function API,
+ jit. Compilation and automatic differentiation can be composed arbitrarily, so
+ you can express sophisticated algorithms and get maximal performance without
+ leaving Python.
+"""
+
+toolchain = SYSTEM
+
+source_urls = [
+    local_url_base,
+    '%s/jax' % local_url_base,
+]
+
+sources = [
+    'singularity_wrapper.tar.gz',
+    local_image_name,
+]
+
+extract_sources = False
+
+install_cmd  = 'mkdir -p %(installdir)s/{bin,images} && '
+install_cmd += 'tar xfz singularity_wrapper.tar.gz -C %(installdir)s/bin && '
+install_cmd += 'cp ' + local_image_name + ' %(installdir)s/images'
+
+postinstallcmds = [
+    'cd %(installdir)s/bin; cat >' + local_execscript_name + ' <<EOF\n' + local_execscript.replace('$', '\$') + '\nEOF\n',
+    'cd %(installdir)s/bin; chmod a+rx ' + local_execscript_name,
+    'cd %(installdir)s/bin;' + ' && '.join(['ln -s %s %s' % (local_execscript_name, x) for x in local_symlinks]),
+]
+
+sanity_check_paths = {
+    'files': ['bin/python3', 'images/%s' % local_image_name],
+    'dirs': [],
+}
+
+modextravars = {
+  'SING_IMAGE': '%s/images/%s' % ('%(installdir)s', local_image_name),
+  'PIP_DISABLE_PIP_VERSION_CHECK': '1'
+}
